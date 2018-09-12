@@ -54,8 +54,8 @@ const initialText =
   もみ洗いをしないでください。
   白色及び淡色物と一緒に洗わないでください。
 @address
-  シタテル株式会社
-  096-285-7519
+  XX株式会社
+  000-1234-567
 `
 const initialStyle =
 `#view {
