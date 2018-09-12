@@ -1,11 +1,7 @@
 <template lang='pug'>
-div
-  div#viewarea
-    label 幅(cm)
-    input(type="number" v-model="width" placeholder="幅" min=0 max=99)
-    label 高さ(cm)
-    input(type="number" v-model="height" placeholder="高さ" min=0 max=99)
+div#care-label
 
+  div#viewarea
     div#view(:style="viewsize")
       div(v-for="elem in parsed")
 
@@ -20,13 +16,11 @@ div
   
         div(v-else-if="check(elem, /^@/)" :class="classname(elem)")
           div(v-for="e in take(elem)") {{ e.join(' ') }}
+    input.width(type="number" v-model="width" placeholder="width" min=0 max=99)
+    input.height(type="number" v-model="height" placeholder="height" min=0 max=99)
 
-  div#editor
-    textarea(v-model="text")
-    textarea(:value="preserved" readonly)
-    textarea(:value="JSON.stringify(parsed)" readonly)
-    textarea(v-model="style" @input="applyStyle")
-        
+  textarea#markup(v-model="text")
+  textarea#style(v-model="style" @input="applyStyle")
 
 </template>
 <script>
@@ -49,7 +43,7 @@ const initialText =
 @title
   取り扱い方
 @marks
-  100 やさしく
+  100
   200
   300
   410
@@ -193,19 +187,24 @@ export default {
 }
 </script>
 <style lang='scss'>
-#viewarea {
-  width: 45%;
-  float: left;
-  #view {
-    border: 1px solid gray;
+#care-label {
+  display: flex;
+  #viewarea {
+    #view {
+      border: 1px solid gray;
+    }
+    .width, .height{
+      margin-top: 1px;
+      width: 50%;
+    }
+    margin-right: 8px;
   }
-}
-#editor {
-  width: 45%;
-  float: left;
   textarea {
-    width: 24%;
-    height: 40%;
+    margin-right: 1px;
+    width: 6cm;
+  }
+  #style {
+    background-color: lightgray;
   }
 }
 </style>
