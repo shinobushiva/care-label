@@ -2,7 +2,14 @@
 div#care-label
 
   div#viewarea
-    div#view(:style="viewsize")
+
+    div
+      button(@click="imaging") download as image
+    div
+      input.width(type="number" v-model="width" placeholder="width" min=0 max=99)
+      input.height(type="number" v-model="height" placeholder="height" min=0 max=99)
+
+    div#view(:style="viewsize" ref="view")
       div(v-for="elem in parsed")
 
         div(v-if="check(elem, /^@mixings/)" :class="classname(elem)")
@@ -16,14 +23,13 @@ div#care-label
   
         div(v-else-if="check(elem, /^@/)" :class="classname(elem)")
           div(v-for="e in take(elem)") {{ e.join(' ') }}
-    input.width(type="number" v-model="width" placeholder="width" min=0 max=99)
-    input.height(type="number" v-model="height" placeholder="height" min=0 max=99)
 
   textarea#markup(v-model="text")
   textarea#style(v-model="style" @input="applyStyle")
 
 </template>
 <script>
+import domtoimage from 'dom-to-image'
 import parser from './parser.js'
 
 const initialText =
@@ -179,6 +185,15 @@ export default {
     },
     isValidMarkId(id) {
       return validMarks.findIndex(e => e === id) !== -1
+    },
+    imaging() {
+      domtoimage.toPng(this.$refs.view)
+        .then((dataUrl) => {
+          var link = document.createElement('a')
+          link.download = 'care-label.png'
+          link.href = dataUrl
+          link.click()
+        })
     }
   },
   mounted() {
@@ -192,10 +207,15 @@ export default {
   #viewarea {
     #view {
       border: 1px solid gray;
+      background-color: white;
     }
     .width, .height{
-      margin-top: 1px;
+      margin-bottom: 1px;
       width: 50%;
+    }
+    button {
+      margin-bottom: 1px;
+      width: 100%;
     }
     margin-right: 8px;
   }
